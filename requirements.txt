@@ -1,2 +1,7 @@
 pyTelegramBotAPI==4.14.0
+
 matplotlib==3.7.0
+
+pytelegrambotapi
+python-dotenv
+requests
