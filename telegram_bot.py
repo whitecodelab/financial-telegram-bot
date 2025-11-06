@@ -4,7 +4,19 @@ import time
 from sqlite_database import db
 from categories import CATEGORIES, detect_category
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from config import API_TOKEN
+
+import os
+from dotenv import load_dotenv
+
+# Загружаем переменные из .env файла (для локальной разработки)
+load_dotenv()
+
+# Безопасное получение токена
+API_TOKEN = os.getenv('BOT_TOKEN') or os.environ.get('BOT_TOKEN')
+
+if not API_TOKEN:
+    raise ValueError("BOT_TOKEN не найден! Проверьте .env файл или переменные окружения на Railway")
+
 import charts  # Для визуальной статистики
 
 # Отключаем предупреждения matplotlib
@@ -1241,8 +1253,8 @@ if __name__ == "__main__":
     print("💰 Бот запущен! Для остановки нажмите Ctrl+C")
     
     try:
-        bot.polling(none_stop=False, interval=0, timeout=20)
-    except KeyboardInterrupt:
-        print("\n\n🛑 Бот остановлен пользователем!")
+        bot.polling(none_stop=True, interval=0, timeout=60)
     except Exception as e:
         print(f"\n❌ Ошибка: {e}")
+        # На Railway бот должен перезапускаться при ошибках
+        time.sleep(10)
